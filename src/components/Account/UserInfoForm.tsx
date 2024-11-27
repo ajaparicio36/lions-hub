@@ -104,10 +104,10 @@ export default function UserInfoForm() {
       <Card className="w-full max-w-md mx-auto">
         <CardContent>
           <div className="flex flex-col items-center justify-center py-4 space-y-3">
-            <Skeleton className="h-[200px] w-[325px] rounded-xl" />
+            <Skeleton className="h-[200px] w-[325px] rounded-xl bg-background" />
             <div className="space-y-2">
-              <Skeleton className="h-4 w-[325px]" />
-              <Skeleton className="h-4 w-[275px]" />
+              <Skeleton className="h-4 w-[325px] bg-background" />
+              <Skeleton className="h-4 w-[275px] bg-background" />
             </div>
           </div>
         </CardContent>

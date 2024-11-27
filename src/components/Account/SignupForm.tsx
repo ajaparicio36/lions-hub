@@ -66,8 +66,23 @@ export default function SignupForm() {
         values.password
       );
       const user = userCredential.user;
-      console.log("User signed up successfully", user);
-      router.push("/account/info");
+      const idToken = await user.getIdToken();
+
+      // Create session cookie
+      const response = await fetch("/api/auth/session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ idToken }),
+      });
+
+      if (response.ok) {
+        console.log("User signed up successfully", user);
+        router.push("/account/info");
+      } else {
+        throw new Error("Failed to create session");
+      }
     } catch (error) {
       console.error("Error signing up:", error);
       setError("Failed to sign up. Please try again.");
@@ -79,8 +94,23 @@ export default function SignupForm() {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       const user = userCredential.user;
-      console.log("User signed up with Google successfully", user);
-      router.push("/account/info");
+      const idToken = await user.getIdToken();
+
+      // Create session cookie
+      const response = await fetch("/api/auth/session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ idToken }),
+      });
+
+      if (response.ok) {
+        console.log("User signed up with Google successfully", user);
+        router.push("/account/info");
+      } else {
+        throw new Error("Failed to create session");
+      }
     } catch (error) {
       console.error("Error signing up with Google:", error);
       setError("Failed to sign up with Google. Please try again.");

@@ -60,15 +60,29 @@ export default function LoginForm() {
         values.password
       );
       const user = userCredential.user;
+      const idToken = await user.getIdToken();
 
-      console.log("User logged in successfully", user);
+      // Create session cookie
+      const response = await fetch("/api/auth/session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ idToken }),
+      });
 
-      // Check if user has completed their profile
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      if (userDoc.exists()) {
-        router.push("/dashboard"); // User has completed profile, redirect to dashboard
+      if (response.ok) {
+        console.log("User logged in successfully", user);
+
+        // Check if user has completed their profile
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          router.push("/app"); // User has completed profile, redirect to dashboard
+        } else {
+          router.push("/account/info"); // User needs to complete profile
+        }
       } else {
-        router.push("/account/info"); // User needs to complete profile
+        throw new Error("Failed to create session");
       }
     } catch (error) {
       console.error("Error logging in:", error);
@@ -83,8 +97,23 @@ export default function LoginForm() {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       const user = userCredential.user;
-      console.log("User signed up with Google successfully", user);
-      router.push("/account/info");
+      const idToken = await user.getIdToken();
+
+      // Create session cookie
+      const response = await fetch("/api/auth/session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ idToken }),
+      });
+
+      if (response.ok) {
+        console.log("User signed up with Google successfully", user);
+        router.push("/account/info");
+      } else {
+        throw new Error("Failed to create session");
+      }
     } catch (error) {
       console.error("Error signing up with Google:", error);
       setError("Failed to sign up with Google. Please try again.");
