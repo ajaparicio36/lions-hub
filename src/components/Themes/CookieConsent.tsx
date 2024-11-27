@@ -3,21 +3,28 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import Cookies from "js-cookie";
 
 export function CookieConsent() {
   const [showConsent, setShowConsent] = useState(false);
 
   useEffect(() => {
-    const consent = Cookies.get("cookie-consent");
-    if (consent === undefined) {
-      setShowConsent(true);
-    }
+    const checkConsent = async () => {
+      const response = await fetch("/api/cookie-consent");
+      const { consent } = await response.json();
+      if (consent === undefined) {
+        setShowConsent(true);
+      }
+    };
+    checkConsent();
   }, []);
 
-  const handleConsent = (accepted: boolean) => {
-    Cookies.set("cookie-consent", accepted ? "accepted" : "rejected", {
-      expires: 365,
+  const handleConsent = async (accepted: boolean) => {
+    await fetch("/api/cookie-consent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ consent: accepted ? "accepted" : "rejected" }),
     });
     setShowConsent(false);
     toast.dismiss("cookie-consent");
