@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/popover";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
+import { logout } from "@/lib/logout";
 
 export const menuItems = [
   { icon: Home, label: "Hub", href: "/app" },
@@ -45,12 +46,17 @@ export const menuItems = [
 export function AppSidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const { userData } = useUserData();
 
   const handleLogout = async () => {
-    await signOut();
-    router.push("/account");
+    const success = await logout();
+    if (success) {
+      router.push("/account");
+    } else {
+      console.error("Logout failed");
+      // You might want to show an error message to the user here
+    }
   };
 
   const userPhotoUrl = user?.photoURL || "";
