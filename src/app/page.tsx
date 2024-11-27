@@ -24,7 +24,7 @@ export default function LandingPage() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Link href="/register">
+                  <Link href="/account">
                     <Button
                       size="lg"
                       className="bg-primary text-primary-foreground"
@@ -107,7 +107,7 @@ export default function LandingPage() {
                   account today.
                 </p>
               </div>
-              <Link href="/register">
+              <Link href="/account">
                 <Button
                   size="lg"
                   className="bg-primary text-primary-foreground"
@@ -122,8 +122,7 @@ export default function LandingPage() {
       </main>
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center justify-between px-4 md:px-6 border-t">
         <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Golden Lions VALORANT. All rights
-          reserved.
+          © {new Date().getFullYear()} tatayless. All rights reserved.
         </p>
         <nav className="flex gap-4 sm:gap-6">
           <Link className="text-xs hover:underline underline-offset-4" href="#">
