@@ -8,7 +8,7 @@ export function NoTeams() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <p className="text-2xl font-bold mb-4">You're not on a team!</p>
+      <p className="text-2xl font-bold mb-4">You are not on a team!</p>
       <div className="space-x-4">
         <Button onClick={() => router.push("/create-team")}>
           Create a team
