@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CreateTeamForm } from "./CreateTeamForm";
 import { JoinTeamForm } from "./JoinTeamForm";
 import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface CreateJoinTeamDialogProps {
   userId: string;
@@ -21,6 +22,7 @@ interface CreateJoinTeamDialogProps {
 
 export function CreateJoinTeamDialog({ userId }: CreateJoinTeamDialogProps) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -42,10 +44,20 @@ export function CreateJoinTeamDialog({ userId }: CreateJoinTeamDialogProps) {
             <TabsTrigger value="join">Join Team</TabsTrigger>
           </TabsList>
           <TabsContent value="create">
-            <CreateTeamForm userId={userId} onSuccess={() => setOpen(false)} />
+            <CreateTeamForm
+              userId={userId}
+              onSuccess={() => {
+                router.push("/app");
+              }}
+            />
           </TabsContent>
           <TabsContent value="join">
-            <JoinTeamForm userId={userId} onSuccess={() => setOpen(false)} />
+            <JoinTeamForm
+              userId={userId}
+              onSuccess={() => {
+                router.push("/app");
+              }}
+            />
           </TabsContent>
         </Tabs>
       </DialogContent>

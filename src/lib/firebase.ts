@@ -6,6 +6,7 @@ import {
   browserSessionPersistence,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -15,7 +16,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyAGknD_tLyeBYKYTufxonPhdv7niNxIYvk",
   authDomain: "lions-hub.firebaseapp.com",
   projectId: "lions-hub",
-  storageBucket: "lions-hub.firebasestorage.app",
+  storageBucket: "gs://lions-hub.firebasestorage.app",
   messagingSenderId: "775369091689",
   appId: "1:775369091689:web:23b9adbc6ea891157810f8",
   measurementId: "G-9PP2FNF7KD",
@@ -26,8 +27,9 @@ const firebaseConfig = {
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 // Set session persistence
 setPersistence(auth, browserSessionPersistence);
 
-export { app, auth, db };
+export { app, auth, db, storage };

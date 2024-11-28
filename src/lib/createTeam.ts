@@ -143,6 +143,7 @@ export function CreateTeamForm({ userId, onSuccess }: CreateTeamFormProps) {
 
       onSuccess();
     } catch (error) {
+      console.error("Error creating team:", error);
       if (error instanceof FirebaseError) {
         switch (error.code) {
           case "storage/unauthorized":

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Team } from "@/lib/teams";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Users } from "lucide-react";
@@ -27,12 +27,9 @@ export function TeamList({ teams }: TeamListProps) {
         >
           <div className="p-6 flex flex-col items-center text-center">
             <Avatar className="h-24 w-24 mb-4">
-              <AvatarImage
-                src={team.photo || "/teams/default.jpg"}
-                alt={team.teamName}
-              />
+              <AvatarImage src={team.photo || undefined} alt={team.teamName} />
               <AvatarFallback className="text-2xl">
-                {team.teamName[0]}
+                {team.teamName[0].toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <h3 className="text-xl font-semibold mb-1">{team.teamName}</h3>
