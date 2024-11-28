@@ -1,56 +1,63 @@
-"use client";
+import { Suspense } from "react";
+import { getUserFromSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import TeamInfo from "@/components/TeamDashboard/TeamInfo";
+import PracticeArea from "@/components/TeamDashboard/PracticeArea";
+import TeamFeed from "@/components/TeamDashboard/TeamFeed";
+import TeamMembers from "@/components/TeamDashboard/TeamMembers";
+import { getUserTeamById } from "@/lib/getTeamById";
+import TeamInfoSkeleton from "@/components/TeamDashboard/skeletons/TeamInfoSkeleton";
+import PracticeAreaSkeleton from "@/components/TeamDashboard/skeletons/PracticeAreaSkeleton";
+import TeamFeedSkeleton from "@/components/TeamDashboard/skeletons/TeamFeedSkeleton";
+import TeamMembersSkeleton from "@/components/TeamDashboard/skeletons/TeamMembersSkeleton";
 
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Team } from "@/lib/teams";
+export default async function TeamDashboardPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const id = (await params).id;
+  const user = await getUserFromSession();
+  if (!user) {
+    redirect("/account");
+  }
 
-export default function TeamPage() {
-  const { id } = useParams<{ id: string }>();
-  const [team, setTeam] = useState<Team | null>(null);
-
-  useEffect(() => {
-    async function fetchTeam() {
-      const docRef = doc(db, "teams", id);
-      const teamDoc = await getDoc(docRef);
-      if (teamDoc.exists()) {
-        const team = {
-          id: teamDoc.id,
-          teamName: teamDoc.data().teamName,
-          description: teamDoc.data().description,
-          gameName: teamDoc.data().gameName,
-          userUids: teamDoc.data().userUids,
-        };
-        setTeam(team);
-      }
-    }
-    fetchTeam();
-  }, [id]);
-
+  const team = await getUserTeamById(user.id, id);
   if (!team) {
-    return <div>Loading...</div>;
+    redirect("/app");
   }
 
   return (
-    <div className="p-4">
-      <Card>
-        <CardHeader>
-          <CardTitle>{team["teamName"]}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>
-            <strong>Game:</strong> {team.gameName}
-          </p>
-          <p>
-            <strong>Description:</strong> {team.description}
-          </p>
-          <p>
-            <strong>Members:</strong> {team["userUids"].length}
-          </p>
-        </CardContent>
-      </Card>
+    <div className="container mx-auto p-4 space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Section A - Team Info */}
+        <div className="md:col-span-2">
+          <Suspense fallback={<TeamInfoSkeleton />}>
+            <TeamInfo team={team} />
+          </Suspense>
+        </div>
+
+        {/* Section B - Practice Area */}
+        <div>
+          <Suspense fallback={<PracticeAreaSkeleton />}>
+            <PracticeArea />
+          </Suspense>
+        </div>
+
+        {/* Section C - Team Feed */}
+        <div className="md:col-span-2">
+          <Suspense fallback={<TeamFeedSkeleton />}>
+            <TeamFeed teamId={team.id} />
+          </Suspense>
+        </div>
+
+        {/* Section D - Team Members */}
+        <div>
+          <Suspense fallback={<TeamMembersSkeleton />}>
+            <TeamMembers team={team} />
+          </Suspense>
+        </div>
+      </div>
     </div>
   );
 }

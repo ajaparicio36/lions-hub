@@ -9,3 +9,8 @@ export interface UserData {
   name: string;
   phone: string;
 }
+
+export interface UserWithId extends UserData {
+  id: string;
+  photo?: string;
+}

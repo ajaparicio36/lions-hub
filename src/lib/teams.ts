@@ -4,4 +4,6 @@ export interface Team {
   description: string;
   gameName: string;
   userUids: string[];
+  photo?: string;
+  code?: string;
 }
