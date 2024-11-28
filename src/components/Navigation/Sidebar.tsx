@@ -4,9 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Home,
-  Users,
   Trophy,
-  BarChart2,
   MessageCircle,
   Settings,
   MoreVertical,
@@ -33,12 +31,11 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { logout } from "@/lib/logout";
+import { ThemeSwitcher } from "../Themes/ThemeSwitcher";
 
 export const menuItems = [
   { icon: Home, label: "Hub", href: "/app" },
-  { icon: Users, label: "Team", href: "/app/team" },
   { icon: Trophy, label: "Tournaments", href: "/app/tournaments" },
-  { icon: BarChart2, label: "Statistics", href: "/app/statistics" },
   { icon: MessageCircle, label: "Chat", href: "/app/chat" },
   { icon: Settings, label: "Settings", href: "/app/settings" },
 ];
@@ -66,18 +63,22 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <span className="font-bold">Lions Hub</span>
+          <SidebarMenuItem className="p-4 text-center">
+            <SidebarMenuButton className="items-center" asChild>
+              <span className="font-bold text-lg">Lions Hub</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="px-4">
         <SidebarMenu>
           {menuItems.map((item) => (
-            <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton asChild isActive={pathname === item.href}>
+            <SidebarMenuItem className="py-2" key={item.href}>
+              <SidebarMenuButton
+                asChild
+                className="py-2"
+                isActive={pathname === item.href}
+              >
                 <Link href={item.href} className="flex items-center gap-2">
                   <item.icon className="h-5 w-5" />
                   <span>{item.label}</span>
@@ -88,6 +89,7 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
+        <ThemeSwitcher variant="full" />
         <div className="flex items-start justify-between p-4">
           <div className="flex items-center gap-3">
             <Avatar>
