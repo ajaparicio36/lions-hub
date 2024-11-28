@@ -1,20 +1,12 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Frown } from "lucide-react";
 
 export function NoTeams() {
-  const router = useRouter();
-
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <p className="text-2xl font-bold mb-4">You are not on a team!</p>
-      <div className="space-x-4">
-        <Button onClick={() => router.push("/create-team")}>
-          Create a team
-        </Button>
-        <Button onClick={() => router.push("/join-team")}>Join a team</Button>
-      </div>
+    <div className="flex flex-col items-center justify-center gap-4 opacity-80 h-screen">
+      <Frown className="h-24 w-24 text-gray-500" />
+      <p className="text-2xl font-bold mb-4 text-gray-500">
+        You are not on a team!
+      </p>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 export interface Team {
   id: string;
-  teamName: string;
+  name: string;
   description: string;
   gameName: string;
   userUids: string[];

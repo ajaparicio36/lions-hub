@@ -7,13 +7,13 @@ export default function TeamInfo({ team }: { team: Team }) {
     <Card className="col-span-2">
       <CardHeader className="flex flex-row items-center gap-4">
         <Avatar className="h-20 w-20">
-          <AvatarImage src={team.photo || undefined} alt={team.teamName} />
+          <AvatarImage src={team.photo} alt={team.name} />
           <AvatarFallback className="text-3xl">
-            {team.teamName[0].toUpperCase()}
+            {team.name[0].toUpperCase()}
           </AvatarFallback>
         </Avatar>
         <div>
-          <CardTitle>{team.teamName}</CardTitle>
+          <CardTitle>{team.name}</CardTitle>
           <p className="text-sm text-muted-foreground">{team.gameName}</p>
         </div>
       </CardHeader>

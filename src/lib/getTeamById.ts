@@ -23,9 +23,10 @@ export async function getUserTeamById(
 
   return {
     id: doc.id,
-    teamName: data?.teamName || "",
+    name: data?.teamName || "",
     description: data?.description || "",
     gameName: data?.gameName || "",
     userUids: data?.userUids || [],
+    photo: data?.photo || "",
   };
 }

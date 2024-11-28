@@ -3,8 +3,15 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Users, Trophy, MessageCircle } from "lucide-react";
 import { CookieConsent } from "@/components/Themes/CookieConsent";
 import LandingNavBar from "@/components/Navigation/LandingNavBar";
+import { getUserFromSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const user = await getUserFromSession();
+  if (user) {
+    redirect("/app");
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <LandingNavBar />

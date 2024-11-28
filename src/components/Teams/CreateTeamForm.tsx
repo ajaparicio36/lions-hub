@@ -15,12 +15,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 import { FirebaseError } from "firebase/app";
-import { storage, auth } from "@/lib/firebase";
+import { storage, auth, db } from "@/lib/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { getTeamRef } from "@/lib/getNewTeamRef";
+import { createNewTeam } from "@/lib/getNewTeamRef";
+import { doc, setDoc } from "firebase/firestore";
 
 // Constants
 const MAX_FILE_SIZE = 5000000; // 5MB
@@ -117,28 +118,22 @@ export function CreateTeamForm({ userId, onSuccess }: CreateTeamFormProps) {
       }
 
       // Create team reference first to get ID
-      const teamRef = await getTeamRef({
-        teamName: values.teamName,
-        description: values.description,
-        gameName: values.gameName,
-        userUids: [userId],
-      });
+      const teamDoc = await createNewTeam();
 
       // Handle photo upload if exists
       let photoUrl: string | undefined;
       if (values.photo?.[0]) {
-        photoUrl = await uploadImage(values.photo[0], teamRef.id);
+        photoUrl = await uploadImage(values.photo[0], teamDoc.id);
       }
 
-      // Create the team document
-      await teamRef.set({
+      const teamRef = doc(db, "teams", teamDoc.id);
+
+      await setDoc(teamRef, {
         teamName: values.teamName,
         description: values.description,
         gameName: values.gameName,
         userUids: [...new Set([userId, currentUser.uid])],
         photo: photoUrl || null,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
       });
 
       onSuccess();
@@ -277,6 +272,7 @@ export function CreateTeamForm({ userId, onSuccess }: CreateTeamFormProps) {
                     }}
                     disabled={isLoading}
                     {...field}
+                    {...value}
                   />
                   {previewUrl && (
                     <div className="relative h-16 w-16 overflow-hidden rounded-full">
